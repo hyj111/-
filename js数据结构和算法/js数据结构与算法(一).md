@@ -10,7 +10,7 @@
 
 ![img](https://gitee.com/ahuntsun/BlogImgs/raw/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%A0%88/1.png)
 
-### 程序中的栈结构
+## 程序中的栈结构
 
 **函数调用栈**：
 
@@ -24,7 +24,7 @@ a()
 
 A函数中调用B，B调用C，C调用D；在A执行的过程中会将A压入栈，随后B执行时B也被压入栈，函数C和D执行时也会被压入栈。所以当前栈的顺序为：A->B->C->D（栈顶）；函数D执行完之后，会弹出栈被释放，弹出栈的顺序为D->C->B->A;
 
-### 面试题
+## 面试题
 
 题目：有 6 个元素 6，5，4，3，2，1 按顺序进栈，问下列哪一个不是合法的出栈顺序？
 
@@ -42,7 +42,7 @@ A函数中调用B，B调用C，C调用D；在A执行的过程中会将A压入栈
 - C答案：6543进栈，3出栈，4出栈，之后应该5出栈而不是6，所以错误；
 - D答案：65432进栈，2出栈，3出栈，4出栈，1进栈出栈，5出栈，6出栈。符合入栈顺序；
 
-### 数组封装栈
+## 数组封装栈
 
 **栈常见的操作：**
 
@@ -115,7 +115,7 @@ class Stack {
     alert(s.size())
 ```
 
-### 栈结构的特点封装实现十进制转换为二进制的方法
+## 栈结构的特点封装实现十进制转换为二进制的方法
 
 **默认已经封装好了栈结构**
 
@@ -196,7 +196,7 @@ class Queue{
             return this.items.shift()
         }
         // 3.查看前端元素
-        font(){
+        front(){
             return this.items[0]
         }
         // 4.查看队列是否为空
@@ -1415,5 +1415,710 @@ size() {
     }
 ```
 
-# 集合
 
+
+# 树
+
+## 树结构对比于数组/链表/哈希表
+
+**数组：**
+
+- 优点：可以通过**下标值访问**，效率高；
+- 缺点：查找数据时需要先对数据进行**排序**，生成**有序数组**，才能提高查找效率；并且在插入和删除元素时，需要大量的**位移操作**；
+
+**链表：**
+
+- 优点：数据的插入和删除操作效率都很高；
+- 缺点：**查找**效率低，需要从头开始依次查找，直到找到目标数据为止；当需要在链表中间位置插入或删除数据时，插入或删除的效率都不高。
+
+**哈希表：**
+
+- 优点：哈希表的插入/查询/删除效率都非常高；
+- 缺点：**空间利用率不高**，底层使用的数组中很多单元没有被利用；并且哈希表中的元素是**无序**的，不能按照固定顺序遍历哈希表中的元素；而且不能快速找出哈希表中**最大值或最小值**这些特殊值。
+
+**树结构：**
+
+优点：树结构综合了上述三种结构的优点，同时也弥补了它们存在的缺点（虽然效率不一定都比它们高），比如树结构中数据都是有序的，查找效率高；空间利用率高；并且可以快速获取最大值和最小值等。
+
+总的来说：**每种数据结构都有自己特定的应用场景**
+
+## 树的常用术语
+
+![image-20200919085136880](js数据结构与算法(一).assets/image-20200919085136880.png)
+
+- **节点的度（Degree）**：节点的**子树个数**，比如节点B的度为2，节点d的度为1；
+- **树的度**：树的所有节点中**最大的度数**，如上图树的度为2；
+- **叶节点（Leaf）**：**度为0的节点**（也称为叶子节点），如上图的H，I等；
+- **父节点（Parent）**：度不为0的节点称为父节点，如上图节点B是节点D和E的父节点；
+- **子节点（Child）**：若B是D的父节点，那么D就是B的子节点；
+- **兄弟节点（Sibling）**：具有同一父节点的各节点彼此是兄弟节点，比如上图的B和C，D和E互为兄弟节点；
+- **路径和路径长度**：路径指的是一个节点到另一节点的通道，路径所包含边的个数称为路径长度，比如A->H的路径长度为3；
+- **节点的层次（Level）**：规定**根节点在1层**，其他任一节点的层数是其父节点的**层数加1**。如B和C节点的层次为2；
+- **树的深度（Depth）**：树种所有节点中的**最大层次**是这棵树的深度，如上图树的深度为4；
+
+## 树结构的表示方式
+
+- **最普通的表示方法**：
+
+![image-20200919085816889](js数据结构与算法(一).assets/image-20200919085816889.png)
+
+如图，树结构的组成方式类似于链表，都是由一个个节点连接构成。不过，根据每个父节点子节点数量的不同，每一个父节点需要的引用数量也不同。比如节点A需要3个引用，分别指向子节点B，C，D；B节点需要2个引用，分别指向子节点E和F；K节点由于没有子节点，所以不需要引用。
+
+这种方法缺点在于我们无法确定某一结点的引用数
+
+- **儿子-兄弟表示法**：
+
+![image-20200919085915968](js数据结构与算法(一).assets/image-20200919085915968.png)
+
+- **儿子-兄弟表示法旋转**
+
+以下为儿子-兄弟表示法组成的树结构：
+
+![image-20200919090430140](js数据结构与算法(一).assets/image-20200919090430140.png)
+
+将其顺时针旋转45°之后：
+
+![image-20200919090450727](js数据结构与算法(一).assets/image-20200919090450727.png)
+
+# 二叉树
+
+## 二叉树简介
+
+**二叉树的概念**：如果树中的每一个节点最多只能由**两个子节点**，这样的树就称为**二叉树**；
+
+二叉树十分重要，不仅仅是因为简单，更是因为几乎所有的树都可以表示成二叉树形式。
+
+**二叉树的组成**：
+
+- 二叉树可以为空，也就是没有节点；
+- 若二叉树不为空，则它由根节点和称为其左子树TL和右子树TR的两个不相交的二叉树组成；
+
+**二叉树的五种形态**：
+
+![image-20200919091316799](js数据结构与算法(一).assets/image-20200919091316799.png)
+
+**二叉树的特性(笔试常见)**：
+
+- 一个二叉树第i层的最大节点数为：**2^(i-1),i>=1**;
+- 深度为k的二叉树有最大节点总数为：**2^k - 1,k >=1**
+- 对于任何非空的二叉树T，若n0表示叶节点的个数，n2是度为2的非叶节点个数，那么两者满足**n0 = n2+1**
+
+![image-20200919092216670](js数据结构与算法(一).assets/image-20200919092216670.png)
+
+## 特殊的二叉树
+
+### 完美二叉树
+
+完美二叉树（Perfect Binary Tree）也成为满二叉树（Full Binary Tree），在二叉树中，除了最下一层的叶子节点外，每层节点都有2个子节点，这就构成了完美二叉树
+
+![image-20200919092401496](js数据结构与算法(一).assets/image-20200919092401496.png)
+
+**完全二叉树**
+
+完全二叉树（Complete Binary Tree）:
+
+- 除了二叉树最后一层外，其他各层的节点数都达到了最大值；
+- 并且，最后一层的叶子节点从左向右是连续存在，只缺失右侧若干叶子节点；
+- 完美二叉树是特殊的完全二叉树；
+
+![image-20200919092517580](js数据结构与算法(一).assets/image-20200919092517580.png)
+
+上图的树不是完全二叉树，因为`D`缺失了右子节点，不满足条件2。
+
+## 二叉树的数据存储
+
+常见的二叉树存储方式为**数组**和**链表**：
+
+### **使用数组**
+
+- **完全二叉树**：按从上到下，从左到右的方式存储数据。
+
+![image-20200919092729977](js数据结构与算法(一).assets/image-20200919092729977.png)
+
+使用数组存储时，取数据的时候也十分方便：左子节点的序号等于父节点序号 * 2，右子节点的序号等于父节点序号 * 2 + 1 。
+
+- **非完全二叉树**：非完全二叉树需要转换成完全二叉树才能按照上面的方案存储，这样会浪费很大的存储空间。
+
+![image-20200919092915013](js数据结构与算法(一).assets/image-20200919092915013.png)
+
+### **使用链表**
+
+二叉树最常见的存储方式为**链表**：每一个节点封装成一个Node，Node中包含存储的数据、左节点的引用和右节点的引用。
+
+![image-20200919093026084](js数据结构与算法(一).assets/image-20200919093026084.png)
+
+## 二叉搜索树
+
+**二叉搜索树**（**BST**，Binary Search Tree），也称为**二叉排序树**和**二叉查找树**。
+
+二叉搜索树是一棵二叉树，可以为空；
+
+如果不为空，则满足以下**性质**：
+
+- 条件1：非空左子树的**所有**键值**小于**其根节点的键值。比如三中节点6的所有非空左子树的键值都小于6；
+- 条件2：非空右子树的**所有**键值**大于**其根节点的键值；比如三中节点6的所有非空右子树的键值都大于6；
+- 条件3：**左、右子树本身也都是二叉搜索树**；
+
+![image-20200919093315983](js数据结构与算法(一).assets/image-20200919093315983.png)
+
+图一不满足条件3
+
+总结：
+
+二叉搜索树，相对**较小值**总保存在**左节点**上，相对**较大值**总保存在**右节点**上
+
+## 二叉搜索树的封装 
+
+**二叉树搜索树的基本属性**：
+
+如图所示：二叉搜索树有四个最基本的属性：指向节点的**根**（root），节点中的**键**（key）、**左指针**（right）、**右指针**（right）。
+
+![image-20200919093814454](js数据结构与算法(一).assets/image-20200919093814454.png)
+
+**二叉搜索树的常见操作：**
+
+- insert（key）：向树中插入一个新的键；
+- search（key）：在树中查找一个键，如果节点存在，则返回true；如果不存在，则返回false；
+- inOrderTraverse：通过中序遍历方式遍历所有节点；
+- preOrderTraverse：通过先序遍历方式遍历所有节点；
+- postOrderTraverse：通过后序遍历方式遍历所有节点；
+- min：返回树中最小的值/键；
+- max：返回树中最大的值/键；
+- remove（key）：从树中移除某个键
+
+### 封装二叉搜索树类和节点类
+
+```js
+    class Node {
+        constructor(key) {
+            this.key = key;
+            this.left = null;
+            this.right = null
+        }
+    }
+    class BinarySearchTree {
+        constructor() {
+            this.root = null
+        }
+     }
+```
+
+封装节点方便以后操作。
+
+### insert（key）插入数据
+
+```js
+ 	insert(key) {
+            // 1.根据key创建节点
+            const newNode = new Node(key)
+            // 2.如果原来的树是一颗空树
+            if (this.root == null) {
+                this.root = newNode
+            } else(
+                this.insertNode(this.root, newNode)
+            )
+        };
+        // 插入节点方法
+		//内部使用的insertNode方法:用于比较节点从左边插入还是右边插入
+        insertNode(node, newNode) {
+             //当newNode.key > node.key向右查找
+/*----------------------分支1:向右查找--------------------------*/    
+            if (newNode.key > node.key) {
+                //如果node的右节点为空就直接插入
+                if (node.right == null) {
+                    node.right = newNode
+                } else {
+                //不为空就递归继续调用
+                    this.insertNode(node.right, newNode)
+                }
+            } else {
+              //当newNode.key < node.key向左查找
+/*----------------------分支2:向左查找--------------------------*/    
+                if (node.left == null) {
+                    node.left = newNode
+                } else {
+                    this.insertNode(node.left, newNode)
+                }
+            }
+        }
+```
+
+插入操作需要考虑的情况：
+
+1.当插入的数据时候原来的树是一个空树，则让根节点`this.root`等于`newNode`
+
+2.插入数据的时候树不是一个空树，利用递归来插入。
+
+当newNode.key < node.key向左查找:
+
+- 情况1：当node无左子节点时，直接插入：
+- 情况2：当node有左子节点时，递归调用insertNode(),直到遇到无左子节点成功插入newNode后，不再符合该情况，也就不再调用insertNode()，递归停止。
+
+![image-20200919095021666](js数据结构与算法(一).assets/image-20200919095021666.png)
+
+当newNode.key >= node.key向右查找，与向左查找类似：
+
+- 情况1：当node无右子节点时，直接插入：
+- 情况2：当node有右子节点时，依然递归调用insertNode(),直到遇到传入insertNode方法的node无右子节点成功插入newNode为止：
+
+![image-20200919095048758](js数据结构与算法(一).assets/image-20200919095048758.png)
+
+### 树的遍历
+
+这里所说的树的遍历不仅仅针对二叉搜索树，而是适用于所有的二叉树。由于树结构不是线性结构，所以遍历方式有多种选择，常见的三种二叉树遍历方式为：
+
+- 先序遍历；
+- 中序遍历；
+- 后序遍历；
+
+#### 先序遍历
+
+先序遍历的过程为：
+
+- 首先，遍历根节点；
+- 然后，遍历其左子树；
+- 最后，遍历其右子树；
+
+![image-20200919100138858](js数据结构与算法(一).assets/image-20200919100138858.png)
+
+**根=>左=>右**
+
+A B D H I E C F G
+
+代码实现：
+
+```js
+    // 先序遍历
+        preOrderTraverse() {
+            this.preOrderTraverseNode(this.root)
+        }
+        preOrderTraverseNode(node) {
+            if (node == null) {
+                return
+            } else {
+                console.log(node.key);
+                this.preOrderTraverseNode(node.left)
+                this.preOrderTraverseNode(node.right)
+            }
+        }
+```
+
+
+
+#### 中序遍历
+
+
+
+实现思路：与先序遍历原理相同，只不过是遍历的顺序不一样了。
+
+- 首先，遍历其左子树；
+- 然后，遍历根（父）节点；
+- 最后，遍历其右子树；
+
+**在二叉搜索树中，中序遍历必定是从小到大排序的。**
+
+![image-20200919101119205](js数据结构与算法(一).assets/image-20200919101119205.png)
+
+**左=>根=>右**
+
+```js
+   // 中序遍历
+        inOrderTraverse() {
+            this.inOrderTraverseNode(this.root)
+        }
+        inOrderTraverseNode(node) {
+            if (node == null) {
+                return
+            } else {
+                this.inOrderTraverseNode(node.left)
+                console.log(node.key);
+                this.inOrderTraverseNode(node.right)
+            }
+        }
+```
+
+#### 后序遍历
+
+实现思路：与先序遍历原理相同，只不过是遍历的顺序不一样了。
+
+- 首先，遍历其左子树；
+- 然后，遍历其右子树；
+- 最后，遍历根（父）节点；
+
+**左=>右=>根**
+
+![image-20200919101645965](js数据结构与算法(一).assets/image-20200919101645965.png)
+
+上图后序遍历 4 7 8 5 2 6 3 1
+
+```js
+  // 后序遍历
+        postOrderTraverse() {
+            this.postOrderTraverseNode(this.root)
+        }
+        postOrderTraverseNode(node) {
+            if (node == null) {
+                return
+            } else {
+                this.postOrderTraverseNode(node.left)
+
+                this.postOrderTraverseNode(node.right)
+                console.log(node.key);
+            }
+        }
+```
+
+### 查找特定值 search
+
+**通过递归**
+
+```js
+   // 在树中搜索查找某一个键,通过递归
+        search(key) {
+            return this.searchNode(this.root, key)
+        }
+        searchNode(node, key) {
+            // 1.判断node有没有值
+            if (node == null) {
+                return false
+            }
+            // 如果key 大于node.key往右查询
+            if (key > node.key) {
+                //递归
+                return this.searchNode(node.right, key)
+            } else if (key < node.key) { // 如果key 小于node.key往左查询
+                return this.searchNode(node.left, key)
+            } else if (key == node.key) { //相等证明找到了
+                return true
+            }
+        }
+```
+
+  **在树中搜索查找某一个键,不通过递归**
+
+```js
+   search2(key) {
+            let node = this.root
+            while (node != null) {
+                if (key > node.key) {
+                    node = node.right
+                } else if (key < node.key) {
+                    node = node.left
+                } else {
+                    return true
+                }
+            }
+            return false
+        }
+```
+
+### 查找最大值&最小值
+
+在二叉树中最大值肯定在最右边，最小值肯定在最左边
+
+```js
+      // 最大值
+        max() {
+            // 二叉搜索树特点最右边的肯定是最最大的
+            let node = this.root
+            while (node.right != null) {
+                node = node.right
+            }
+            return node.key
+        }
+```
+
+```js
+   // 最小值
+        min() {
+            // 二叉搜索树特点最左边的肯定是最最小的
+            let node = this.root
+            while (node.left != null) {
+                node = node.left
+            }
+            return node.key
+        }
+```
+
+### 删除数据remove(key) 
+
+**第一步：**先找到需要删除的节点，若没找到，则不需要删除；
+
+首先定义变量`current`用于保存需要删除的节点、变量`parent`用于保存它的父节点、变量i`sLeftChild`保存`current`是否为`parent`的左节点，这样方便之后删除节点时改变相关节点的指向。
+
+```js
+      remove(key) {
+      let current = this.root
+            let parent = null
+            let isLeftChild = true
+             //1.2.开始寻找删除的节点
+            while (key !== current.key) {
+                parent = current
+                // 大于则往右查
+                if (key > current.key) {
+                    isLeftChild = false
+                    current = current.right
+                    // 小于则往左查找
+                } else if (key < current.key) {
+                    isLeftChild = true
+                    current = current.left
+                }
+                //找到最后依然没有找到相等的节点
+                if (current == null) {
+                    return false
+                }
+            }
+         }
+```
+
+**第二步：**删除找到的指定节点，后分3种情况：
+
+- 删除叶子节点；
+- 删除只有一个子节点的节点；
+- 删除有两个子节点的节点；
+
+#### 情况1：没有子节点
+
+没有子节点时也有两种情况：
+
+当该叶子节点为根节点时，如下图所示，此时**current == this.root**，直接通过：**this.root = null**，删除根节点。
+
+**当该叶子节点不为根节点时也有两种情况，如下图所示**
+
+![image-20200919103509749](js数据结构与算法(一).assets/image-20200919103509749.png)
+
+```js
+  // 第一种情况 没有子节点,删除的节点是叶子节点
+            if (current.left == null && !current.right == null) {
+                if (current = this.root) {
+                    this.root = null
+                } else if (isLeftChild) { //如果是左孩子
+                    parent.left = null
+                } else { //如果是右孩子
+                    parent.right = null
+                }
+            }
+```
+
+#### 情况2 ：有一个子节点
+
+当current存在左子节点时（current.right == null）：
+
+- 情况1：current为根节点（current == this.root），如节点11，此时通过：this.root = current.left，删除根节点11；
+- 情况2：current为父节点parent的左子节点（isLeftChild == true），如节点5，此时通过：parent.left = current.left，删除节点5；
+- 情况3：current为父节点parent的右子节点（isLeftChild == false），如节点9，此时通过：parent.right = current.left，删除节点9；
+
+![image-20200919104033986](js数据结构与算法(一).assets/image-20200919104033986.png)
+
+当current存在右子节点时（current.left = null）：
+
+- 情况4：current为根节点（current == this.root），如节点11，此时通过：this.root = current.right，删除根节点11。
+- 情况5：current为父节点parent的左子节点（isLeftChild == true），如节点5，此时通过：parent.left = current.right，删除节点5；
+- 情况6：current为父节点parent的右子节点（isLeftChild == false），如节点9，此时通过：parent.right = current.right，删除节点9；
+- ![image-20200919104048974](js数据结构与算法(一).assets/image-20200919104048974.png)
+
+```js
+   // 第二种情况删除的节点只有一个叶子节点
+            // 第二种情况又分为两种情况
+            else if (current.left === null) { //只有右子节点
+                if (current == this.root) {
+                    this.root = current.right
+                } else if (isLeftChild) {
+                    parent.left = current.right
+                } else {
+                    parent.right = current.right
+                }
+            } else if (current.right === null) { //只有左子节点
+                if (current == this.root) {
+                    this.root = current.left
+                } else if (isLeftChild) {
+                    parent.left = current.left
+                } else {
+                   
+```
+
+#### 情况3：有两个子节点
+
+这种情况**十分复杂**，首先依据以下二叉搜索树，讨论这样的问题：
+
+![image-20200919104638827](js数据结构与算法(一).assets/image-20200919104638827.png)
+
+**删除节点7**
+
+在保证删除节点7后原二叉树仍为二叉搜索树的前提下，也有两种方式：
+
+- 方式1：从节点7的左子树中选择一合适的节点替代节点7，可知节点5符合要求；
+- 方式2：从节点7的右子树中选择一合适的节点替代节点7，可知节点8符合要求
+
+![image-20200919104715864](js数据结构与算法(一).assets/image-20200919104715864.png)
+
+**规律总结：**如果要删除的节点有两个子节点，甚至子节点还有子节点，这种情况下需要从要删除节点**下面的子节点中找到一个合适的节点**，来替换当前的节点。
+
+若用current表示需要删除的节点，则合适的节点指的是：
+
+- current左子树中比current**小一点点的节点**，即current**左子树**中的**最大值**；
+- current右子树中比current**大一点点的节点**，即current**右子树**中的**最小值**；
+
+**前驱&后继**
+
+在二叉搜索树中，这两个特殊的节点有特殊的名字：
+
+- 比current小一点点的节点，称为current节点的**前驱**。比如下图中的节点5就是节点7的前驱；
+- 比current大一点点的节点，称为current节点的**后继**。比如下图中的节点8就是节点7的后继；
+
+![image-20200919104920814](js数据结构与算法(一).assets/image-20200919104920814.png)
+
+**代码封装查找后继的方法，要删除元素的右边的，最左边最后一个**
+
+```js
+      // 找前驱或后继 这里选择找后继
+        getSuccessor(delNode) {
+            // 1.定义变量存储临时节点
+            let successerParent = delNode; //后继的父亲
+            let successer = delNode; //后继
+            let current = delNode.right //要删除的元素的右节点
+            // 2.寻找节点
+            while(current!=null) {
+                successerParent = successer
+                successer = current
+                current = current.left  
+            }
+            // 如果后继节点的右节点不为空 ，为什么不判断左节点呢？因为左节点必不可能为空
+            if(successer.right!=null){
+                // 这样做就是当后继节点上移时，他的右孩子接替他原来的位置
+                successerParent.left = successer.right
+            }
+            return successer
+        }
+```
+
+找到后继节点之后
+
+```js
+else{ // 删除的元素左右子节点都有
+    		   // 找到后继节点
+               let successor = this.getSuccessor(current)
+              // 判断是否为根节点
+                if(this.root === current){
+                    this.root = successer
+                    
+                }else if(isLeftChild){
+                    parent.left = successer
+                }else{
+                    parent.right = successer
+                }
+                successer.left = current.left
+            }
+```
+
+#### 删除操作的完整代码
+
+```js
+ // 从树中删除某个键
+        remove(key) {
+            // 1.定义一些变量记录状态
+            let current = this.root
+            let parent = null
+            let isLeftChild = true
+            while (key !== current.key) {
+                parent = current
+                if (key > current.key) {
+                    isLeftChild = false
+                    current = current.right
+                } else if (key < current.key) {
+                    isLeftChild = true
+                    current = current.left
+                }
+                if (current == null) {
+                    return false
+                }
+            }
+            // 来到这表示已经找到了节点
+            // 这时候有3种情况
+            // 第一种情况 没有子节点,删除的节点是叶子节点
+            if (current.left == null && !current.right == null) {
+                if (current = this.root) {
+                    this.root = null
+                } else if (isLeftChild) {
+                    parent.left = null
+                } else {
+                    parent.right = null
+                }
+            }
+            // 第二种情况删除的节点只有一个叶子节点
+            // 第二种情况又分为两种情况
+            else if (current.left === null) { //只有右子节点
+                if (current == this.root) {
+                    this.root = current.right
+                } else if (isLeftChild) {
+                    parent.left = current.right
+                } else {
+                    parent.right = current.right
+                }
+            } else if (current.right === null) { //只有左子节点
+                if (current == this.root) {
+                    this.root = current.left
+                } else if (isLeftChild) {
+                    parent.left = current.left
+                } else {
+                    parent.right = current.left
+                }
+            }else{ // 删除的元素左右子节点都有
+               let successor = this.getSuccessor(current)
+            //    判断是否为根节点
+                if(this.root === current){
+                    this.root = successer
+                    
+                }else if(isLeftChild){
+                    parent.left = successer
+                }else{
+                    parent.right = successer
+                }
+                successer.left = current.left
+            }
+            return true
+        }
+        // 找前驱或后继 这里选择找后继
+        getSuccessor(delNode) {
+            // 1.定义变量存储临时节点
+            let successerParent = delNode;
+            let successer = delNode;
+            let current = delNode.right
+            // 2.寻找节点
+            while(current!=null) {
+                successerParent = successer
+                successer = current
+                current = current.left  
+            }
+            // 如果后继节点的右节点不为空 
+            if(successer.right!=null){
+                successerParent.left = successer.right
+            }
+            return successer
+        }
+```
+
+测试代码
+
+```js
+  const bst = new BinarySearchTree()
+    bst.insert(11)
+    bst.insert(7)
+    bst.insert(15)
+    bst.insert(5)
+    bst.insert(3)
+    bst.insert(9)
+    bst.insert(8)
+    bst.insert(10)
+    bst.insert(13)
+    bst.insert(12)
+    bst.insert(14)
+    bst.insert(20)
+    bst.insert(18)
+    bst.insert(25)
+    bst.insert(6)
+    console.log(bst.remove(24));
+    bst.inOrderTraverse()
+```
+
+# 平衡树

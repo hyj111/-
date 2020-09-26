@@ -1203,7 +1203,7 @@ class Point {
 }
 ```
 
-#### 11.1 **类添加方法**
+### 11.1 **类添加方法**
 
 **语法：**
 
@@ -1341,3 +1341,103 @@ class Father{
 3.类里面的this指向问题. 
 
 4.constructor 里面的this指向实例对象, 方法里面的this 指向这个方法的调用者
+
+## 12 Symbol
+
+ES6 引入了一种新的原始数据类型`Symbol`，表示独一无二的值。它是 JavaScript 语言的第七种数据类型，前六种是：`undefined`、`null`、布尔值（Boolean）、字符串（String）、数值（Number）、对象（Object）。
+
+**凡是属性名属于 Symbol 类型，就都是独一无二的，可以保证不会与其他属性名产生冲突。**
+
+### 12.1 定义方式
+
+方式一
+
+```js
+ let hd = Symbol('hello');
+ let hddd = Symbol('hello');
+ console.log(hd==hddd); //false
+```
+
+方式二
+
+它接受一个字符串作为参数，然后搜索有没有以该参数作为名称的 Symbol 值。如果有，就返回这个 Symbol 值，否则就新建一个以该字符串为名称的 Symbol 值，并将其注册到全局。
+
+```js
+  let s1 = Symbol.for("hello")
+  let s2 = Symbol.for("hello")
+  console.log(s1 == s2); //true
+```
+
+上面代码中，`s1`和`s2`都是 Symbol 值，但是它们都是由同样参数的`Symbol.for`方法生成的，所以实际上是同一个值。
+
+**`symbol.for()`和`symbol()`的区别**
+
+前者会被登记在全局环境中供搜索，后者不会。`Symbol.for()`不会每次调用就返回一个新的 Symbol 类型的值，而是会先检查给定的`key`是否已经存在，如果不存在才会新建一个值。比如，如果你调用`Symbol.for("cat")`30 次，每次都会返回同一个 Symbol 值，但是调用`Symbol("cat")`30 次，会返回 30 个不同的 Symbol 值。
+
+### 12.2Symbol.keyFor()
+
+`Symbol.keyFor()`方法返回一个已登记的 Symbol 类型值的`key`。
+
+```js
+let s1 = Symbol.for("foo");
+Symbol.keyFor(s1) // "foo"
+
+let s2 = Symbol("foo");
+Symbol.keyFor(s2) // undefined
+```
+
+上面代码中，变量`s2`属于未登记的 Symbol 值，所以返回`undefined`。
+
+注意，`Symbol.for()`为 Symbol 值登记的名字，是全局环境的，**不管有没有在全局环境运行**。
+
+## 13 Proxy
+
+Proxy 可以理解成，在目标对象之前架设一层“拦截”，外界对该对象的访问，都必须先通过这层拦截，因此提供了一种机制，可以对外界的访问进行过滤和改写。
+
+### 13.1 get()
+
+`get`方法用于拦截某个属性的读取操作，可以接受三个参数，依次为目标对象、属性名和 proxy 实例本身
+
+```js
+obj = new Proxy(obj,{
+	get(target,prop){
+		
+	}
+})
+```
+
+
+
+### 13.2 set()
+
+`set`方法用来拦截某个属性的赋值操作，可以接受四个参数，依次为目标对象、属性名、属性值和 Proxy 实例本身，其中最后一个参数可选。
+
+```js
+obj = new Proxy(obj,{
+	set(target,prop,val){
+		
+	}
+})
+```
+
+## 14.数组新增方法
+
+### 14.1 reduce
+
+reduce 为数组中的每一个元素依次执行回调函数，不包括数组中被删除或从未被赋值的元素，接受四个参数：初始值（或者上一次回调函数的返回值），当前元素值，当前索引，调用 reduce 的数组。
+
+```js
+arr.reduce(callback,[initialValue]) //initialValue 回调函数中一个参数的初始值
+```
+
+```js
+callback （执行数组中每个值的函数，包含四个参数）
+
+    1、previousValue （上一次调用回调返回的值，或者是提供的初始值（initialValue））
+    2、currentValue （数组中当前被处理的元素）
+    3、index （当前元素在数组中的索引）
+    4、array （调用 reduce 的数组）
+
+initialValue （作为第一次调用 callback 的第一个参数。）
+```
+

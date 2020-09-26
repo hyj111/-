@@ -1018,7 +1018,7 @@ $bus.$emit("aMsg", '来自A页面的消息');
 **接收数据**
 
 ```js
-  EventBus.$on("aMsg", (msg) => {
+  this.$bus.$on("aMsg", (msg) => {
       // A发送来的消息
       this.msg = msg;
     });    
@@ -1213,4 +1213,474 @@ const router = new VueRouter({
 <router-link to='/home' tag='li'>
 ```
 
-- pactive-class: 当`<router-link>`对应的路由匹配成功时, 会自动给当前元素设置一个router-link-active的class, 设置active-class可以修改默认的名称.
+- active-class: 当`<router-link>`对应的路由匹配成功时, 会自动给当前元素设置一个router-link-active的class, 设置active-class可以修改默认的名称.例如可完成如下需求，点击哪个，就让哪个字体变色。
+
+### 10.7 通过代码进行路由跳转
+
+```js
+this.$router.push('/home') //push->pushState
+this.$router.replace('/home') //replace->replaceState
+```
+
+### 10.8 动态路由
+
+在某些情况下，一个页面的path路径可能是不确定的，比如我们进入用户界面时，希望是如下的路径：
+
+/user/aaaa或/user/bbbb
+
+除了有前面的/user之外，后面还跟上了用户的ID
+
+这种path和Component的匹配关系，我们称之为动态路由(也是路由传递数据的一种方式)。
+
+```js
+routes: [
+    // 动态路径参数 以冒号开头
+    { path: '/user/:id', component: User }
+  ]
+```
+
+```js
+<router-link to="/user/123">用户</router-link>
+```
+
+```html
+<div>
+	<h2>{{$route.prams.id}}</h2>
+</div>
+```
+
+![image-20200917092847045](vue.assets/image-20200917092847045.png)
+
+### 10.9路由的懒加载
+
+**官方给的解释:**
+
+当打包构建应用时，Javascript 包会变得非常大，影响页面加载。
+
+如果我们能把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就更加高效了
+
+**官方在说什么呢?**
+
+首先, 我们知道路由中通常会定义很多不同的页面.
+
+这个页面最后被打包在哪里呢? 一般情况下, 是放在一个js文件中.
+
+但是, 页面这么多放在一个js文件中, 必然会造成这个页面非常的大.
+
+如果我们一次性从服务器请求下来这个页面, 可能需要花费一定的时间, 甚至用户的电脑上还出现了短暂空白的情况.
+
+**如何避免这种情况呢? 使用路由懒加载就可以了.**
+
+**路由懒加载做了什么?**
+
+路由懒加载的主要作用就是将路由对应的组件打包成一个个的js代码块.
+
+只有在这个路由被访问到的时候, 才加载对应的组件。
+
+**路由懒加载和没使用路由懒加载的区别：**
+
+![image-20200917094422361](vue.assets/image-20200917094422361.png)
+
+没使用懒加载，所有的业务逻辑打包在一个js文件中。
+
+### 10.10路由嵌套
+
+嵌套路由是一个很常见的功能
+
+比如在home页面中, 我们希望通过/home/news和/home/message访问一些内容.
+
+一个路径映射一个组件, 访问这两个路径也会分别渲染两个组件.
+
+**实现嵌套路由有两个步骤:**
+
+创建对应的子组件, 并且在路由映射中配置对应的子路由.
+
+在组件内部使用`<router-view>`标签.
+
+```js
+ routes: [
+    { path: '/user/:id', component: User,
+      children: [
+        {
+          // 当 /user/:id/profile 匹配成功，
+          // UserProfile 会被渲染在 User 的 <router-view> 中
+          path: 'profile',
+          component: UserProfile
+        },
+        {
+          // 当 /user/:id/posts 匹配成功
+          // UserPosts 会被渲染在 User 的 <router-view> 中
+          path: 'posts',
+          component: UserPosts
+        }
+      ]
+```
+
+### 10.11参数传递
+
+传递参数主要有两种类型: `params`和`query`
+
+**params的类型:**
+
+配置路由格式: /router/:id
+
+传递的方式: 在path后面跟上对应的值
+
+传递后形成的路径: /router/123, /router/abc
+
+**query的类型:**
+
+配置路由格式: /router, 也就是普通配置
+
+传递的方式: 对象中使用query的key作为传递方式
+
+传递后形成的路径: /router?id=123, /router?id=abc
+
+**传递参数的方式一：**
+
+![image-20200917095920179](vue.assets/image-20200917095920179.png)
+
+**传递参数的方式二：**
+
+![image-20200917100001207](vue.assets/image-20200917100001207.png)
+
+#### 10.11.1获取参数
+
+获取参数通过$route对象获取的.
+
+在使用了 vue-router 的应用中，路由对象会被注入每个组件中，赋值为 this.$route ，并且当路由切换时，路由对象会被更新。
+
+通过$route获取传递的信息如下:
+
+![image-20200917100144329](vue.assets/image-20200917100144329.png)
+
+### 10.12 $route和$router是有区别的
+
+**$route和$router是有区别的**
+
+$router为VueRouter实例，想要导航到不同URL，则使用$router.push方法
+
+$route为当前router跳转对象里面可以获取name、path、query、params等 
+
+### 10.13导航守卫
+
+每个守卫方法接收三个参数：
+
+- **`to: Route`**: 即将要进入的目标 [路由对象](https://router.vuejs.org/zh/api/#路由对象)
+- **`from: Route`**: 当前导航正要离开的路由
+- **`next: Function`**: 一定要调用该方法来 **resolve** 这个钩子。执行效果依赖 `next` 方法的调用参数。
+  - **`next()`**: 进行管道中的下一个钩子。如果全部钩子执行完了，则导航的状态就是 **confirmed** (确认的)。
+
+```js
+router.beforeEach((to,from,next)=>{
+	next()
+  })
+```
+
+`router.beforeEach`是一个前置钩子，在路由跳转之前进行回调。
+
+`router.afterEach`是一个后置钩子，在路由跳转后进行回调
+
+```
+router.afterEach((to, from) => {
+  // ...
+})
+```
+
+## 11 vuex
+
+Vuex 是一个专为 Vue.js 应用程序开发的**状态管理模式**。
+
+它采用 集中式存储管理 应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+
+**就是可以理解为多个组件要共享变量，需要一个地方来存储这些变量，这时候就需要使用Vuex来对这些变量进行管理。**
+
+### 11.1vuex的创建
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+// 1.安装插件
+Vue.use(Vuex)
+// 2.创建对象
+const store = new Vuex.Store({
+  state: {},
+  mutations: {},
+    actions:{},
+    getters:{},
+    modules:{},
+})
+// 3.导出store共享
+export default store
+```
+
+![image-20200917104736027](vue.assets/image-20200917104736027.png)
+
+分析上图，在vuex中，不能在组件内直接修改state的数据，**只能mutations里面修改state**。按照这个流程修改能在Devtools插件中跟踪到是谁该了这个数据。
+
+可以直接通过Mutations修改state，当有异步操作的时候一定要在Actions里面操作，否则Devtools插件也跟踪不到。（例如需要发送网络请求）
+
+### 11.2通过mutations修改state数据
+
+```js
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  }
+})
+```
+
+通过 `store.commit` 方法触发状态变更：
+
+```js
+store.commit('increment')
+```
+
+### 11.2单一状态树
+
+意思就是将所有数据放到一个store对象里面。
+
+### 11.3 getters的使用
+
+比如有如下场景需要使用`getters`
+
+在`state`中有个一个数据`conter`,我们在组件中想要使用`conter`的平方，这时候我们就需要使用`getters`了
+
+```js
+const store = new Vuex.Store({
+  state: {
+  	counter:1000
+  },
+    getters:{
+    	powerCounter(state) {
+    		return state.counter*state.counter
+    	}
+    },
+})
+```
+
+使用时：
+
+```
+<h2>{{$store.getters.powerCounter}}</h2>
+```
+
+### 11.4 Mutation状态更新
+
+Vuex的store状态的更新唯一方式：**提交Mutation**
+
+#### 11.4.1 普通的提交风格
+
+```js
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state，count) {
+      state.count+=count
+    }
+  }
+})
+```
+
+```js
+this.store.commit('increment',5)
+```
+
+#### 11.4.2 特殊的提交风格 
+
+```js
+this.store.commit({
+	type:'incrementCount',
+	count:5
+})
+```
+
+```js
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state，payload) {
+      state.count+=payload.count
+    }
+  }
+})
+```
+
+### 11.5 Mutation响应规则
+
+Vuex的store中的state是响应式的, 当state中的数据发生改变时, Vue组件会自动更新.
+
+这就要求我们必须遵守一些Vuex对应的规则:
+
+**提前在store中初始化好所需的属性.**
+
+**当给state中的对象添加新属性时, 使用下面的方式:**
+
+方式一: 使用Vue.set(obj, 'newProp', 123)
+
+方式二: 用新对象给旧对象重新赋值
+
+**一开始就定义好的属性**都会被加入到`vue`的响应式系统里面，响应式系统则会监听属性的变化，当属性发生变化时，就会通知界面中所有用到该属性的地方，让界面发生刷新。
+
+例如有state中有一个对象
+
+```js
+info:{
+	name:"zhangsan",
+	age:15,
+}
+```
+
+当我们通过`Mutation`修改`age`或`name`时是响应式的。
+
+但是我们想给info添加一个address为洛杉矶
+
+```js
+info:{
+	name:"zhangsan",
+	age:15,
+	address:"洛杉矶"
+}
+```
+
+这个address不会加入到响应式系统中，界面不会刷新，因为他不是已经在store里面定义的了。
+
+下面有一个解决方法：
+
+```js
+Vue.set(state.info,'address','洛杉矶')
+```
+
+如果想做到响应式的删除某个属性
+
+```js
+Vue.delete(state.info,'age')
+```
+
+### 11.6 Action
+
+**当有异步操作时候，就需要用到`Action`,最简单的异步操作就是加一个定时器，当直接在`Mutation`中进行操作时候，会出现`devtools`跟踪不到数据变化的情况**。
+
+使用实例：想要异步修改`state`中的`count`
+
+```js
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  actions:{
+  	aUpdate(context,payload) {
+  		setTimeout(()=>{
+  		context.commit('update')
+  		},1000)
+  	}
+  }
+  mutations: {
+    update (state) {
+      state.count++
+    }
+  }
+})
+```
+
+```js
+this.$store.dispatch('aUpdate','携带的信息')
+```
+
+通过promise，当里面完成时候向外面发送信息。
+
+```js
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  actions:{
+  	aUpdate(context,payload) {
+  	return new Promise((resolve,reject)=>{
+  			setTimeout(()=>{
+  		context.commit('update')
+  		resolve('完成了')
+  		},1000)
+  	}
+  	})
+  }
+  mutations: {
+    update (state) {
+      state.count++
+    }
+  }
+})
+```
+
+```js
+this.$store.dispatch('aUpdate','携带的信息').then(res=>{
+	console.log(res)  //完成了
+}) 
+```
+
+### 11.7Module
+
+
+
+```js
+const moduleA = {
+  state: () => ({ ... }),
+  mutations: { ... },
+  actions: { ... },
+  getters: { ... }
+}
+
+const moduleB = {
+  state: () => ({ ... }),
+  mutations: { ... },
+  actions: { ... }
+}
+
+const store = new Vuex.Store({
+  modules: {
+    a: moduleA,
+    b: moduleB
+  }
+})
+
+store.state.a // -> moduleA 的状态
+store.state.b // -> moduleB 的状态
+store.commit('方法名')
+```
+
+为什么调用数据的时候是`store.state.a`,因为实际上`module`被放到了`state`里面了。
+
+**但是调用mutations方法时候还是直接store.commit('方法名')**，和直接在外面定义的没有区别。
+
+#### 11.7.1 在模块中使用getters
+
+```js
+getters(state,getters,rootState){
+	// state 是模块中的state
+    // getters 是模块中的getters
+    // rootState 是根下的state
+}
+```
+
+### 11.7.2 在模块中使用commit
+
+```js
+actions:{
+	aUpdate(context) {
+		context.commit('') //只能提交模块中的mutations
+	}
+}
+```
+
+模块中`actions`中的`context`包含这些东西：
+
+![image-20200917172425706](vue.assets/image-20200917172425706.png)
