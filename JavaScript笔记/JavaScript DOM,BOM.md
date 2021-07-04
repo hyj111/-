@@ -1,12 +1,12 @@
-# 1. DOM简介
+## 1. DOM简介
 
-## 1.1什么是DOM
+### 1.1什么是DOM
 
 文档对象模型（Document Object Model，简称 DOM），是 W3C 组织推荐的处理可扩展标记语言（HTML或者XML）的标准编程接口。
 
 W3C 已经定义了一系列的 DOM 接口，通过这些 DOM 接口可以改变网页的内容、结构和样式。
 
-## 1.2DOM 树
+### 1.2DOM 树
 
 * 文档：一个页面就是一个文档，DOM 中使用 document 表示
 * 元素：页面中的所有标签都是元素，DOM 中使用 element 表示
@@ -14,7 +14,7 @@ W3C 已经定义了一系列的 DOM 接口，通过这些 DOM 接口可以改变
 
 DOM把以上内容都看做是对象
 
-# 2. 获取元素
+## 2. 获取元素
 
 ### `getElementById() `：使用 方法可以获取带有 ID 的元素对象
 
@@ -90,7 +90,7 @@ element.getElementsByTagName('标签名');
 </script>
 ```
 
-# 3.获取特殊元素（body，html）
+## 3.获取特殊元素（body，html）
 
 **获取body元素**
 
@@ -104,7 +104,7 @@ element.getElementsByTagName('标签名');
 1. document.documentElement  // 返回html元素对象
 ```
 
-# 4.事件
+## 4.事件
 
 **事件三要素**
 
@@ -114,15 +114,15 @@ element.getElementsByTagName('标签名');
 
 3. 事件处理程序 （做啥）
 
-## 4.1执行事件的步骤
+### 4.1执行事件的步骤
 
 * 获取事件源  就是获取元素document.xxxx获取元素
 * 注册事件
 * 添加事件处理程序
 
-## 4.2常见鼠标事件
+### 4.2常见鼠标事件
 
-## ![image-20200925200512437](JavaScript DOM,BOM.assets/image-20200925200512437.png)4.3 innerText 和innerHtml
+### ![image-20200925200512437](JavaScript DOM,BOM.assets/image-20200925200512437.png)4.3 innerText 和innerHtml
 
 * innerText不能识别html标签 非标准 去除空格和换行
 
@@ -148,13 +148,13 @@ element.getElementsByTagName('标签名');
   </script>
   ```
 
-## 4.4 修改元素属性
+### 4.4 修改元素属性
 
-```
+```css
 img.src = 'image/01.jpg' //修改图片src
 ```
 
-## 4.5修改元素样式
+### 4.5修改元素样式
 
 我们可以通过 JS 修改元素的大小、颜色、位置等样式。
 
@@ -176,9 +176,9 @@ img.src = 'image/01.jpg' //修改图片src
     })
 ```
 
-## 4.6自定义属性值
+### 4.6自定义属性值
 
-### 4.6.1获取属性值
+#### 4.6.1获取属性值
 
 * element.属性  获取属性值。
 * element.getAttribute('属性');
@@ -202,7 +202,7 @@ img.src = 'image/01.jpg' //修改图片src
 </script>
 ```
 
-### 4.6.2设置属性值
+#### 4.6.2设置属性值
 
 * `element.属性` = ‘值’ 设置内置属性值。
 * `element.setAttribute('属性', '值'); `
@@ -212,11 +212,11 @@ img.src = 'image/01.jpg' //修改图片src
 * `element.属性` 设置内置属性值
 * `element.setAttribute(‘属性’)`; 主要设置自定义的属性 （标准）
 
-### 4.6.3**.** **移除**属性
+#### 4.6.3**.** **移除**属性
 
 `element.removeAttribute('属性');` 
 
-## 4.7 H5自定义属性
+### 4.7 H5自定义属性
 
 **自定义属性目的：是为了保存并使用数据。有些数据可以保存到页面中而不用保存到数据库中。**
 
@@ -249,9 +249,9 @@ console.log(div.dataset.listName);
 console.log(div.dataset['listName']);
 ```
 
-# 5. 节点操作
+## 5. 节点操作
 
-## 5.1 节点概述
+### 5.1 节点概述
 
 网页中的所有内容都是节点（标签、属性、文本、注释等），在DOM 中，节点使用 node 来表示。
 
@@ -263,7 +263,7 @@ HTML DOM 树中的所有节点均可通过 JavaScript 进行访问，所有 HTML
 * 属性节点 nodeType 为 2
 * 文本节点 nodeType 为 3 （文本节点包含文字、空格、换行等）
 
-## 5.2节点层级
+### 5.2节点层级
 
 **父级节点**
 

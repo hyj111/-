@@ -1118,11 +1118,13 @@ var component = new Component() // => "hello from mixin!"
 
 ## 10**vue-router**
 
-### 10.1 hash模式和history模式
+### 10.1 hash模式和history模式和abstract模式
 
 这两个模式改变url页面都不会刷新。
 
 hash 的传参是基于 url 的，如果要传递复杂的数据，会有体积的限制，而 history 模式不仅可以在url里放参数，还可以将数据存放在一个特定的对象中。
+
+**abstract模式**：适用于所有JavaScript环境，例如服务器端和Node.js. 如果没有浏览器API，路由器将自动强制进入此模式。
 
 #### 10.1.1URL的hash
 
@@ -1451,6 +1453,8 @@ store.commit('increment')
 
 在`state`中有个一个数据`conter`,我们在组件中想要使用`conter`的平方，这时候我们就需要使用`getters`了
 
+**就是当你想取数据并且加工一下的时候就能使用getters了**
+
 ```js
 const store = new Vuex.Store({
   state: {
@@ -1684,3 +1688,13 @@ actions:{
 模块中`actions`中的`context`包含这些东西：
 
 ![image-20200917172425706](vue.assets/image-20200917172425706.png)
+
+## 12 .sync
+
+- .sync是一个语法糖，用来进行子组件向父组件传值的
+
+  ![image-20210424231916441](vue.assets/image-20210424231916441.png)
+
+![image-20210424231936572](vue.assets/image-20210424231936572.png)
+
+通过`this.$emit("update:??",值)`，就可以修改父组件的值了。

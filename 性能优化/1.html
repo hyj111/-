@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+
+	function add(a, b) {
+		if(!a || !b) {
+			throw Error('input invalid');
+		}
+ 
+		// state center
+		let aString = a.trim();
+		let bString = b.trim()
+		let maxLength = getMaxLength(aString, bString);
+		let temp = 0;
+		let array = [];
+ 
+		aString = aString.padStart(maxLength, '0');
+		bString = bString.padStart(maxLength, '0');
+ 
+		let aArray = aString.split('');
+		let bArray = bString.split('');
+ 
+		for(var i = maxLength-1; i >= 0; i-- ) {
+			let count = toNumberAdd(aArray[i], bArray[i]);
+			let tempResult = getSplit(count);
+			let subTemp = Number(tempResult[1]) + Number(temp);
+ 
+			if(subTemp >= 10){
+				let subResult = getSplit(subTemp);
+ 
+				array[i] = Number(tempResult[1]) + Number(temp) + Number(subResult[1]);
+				temp = tempResult[0] + subResult[0];
+ 
+			}else {
+				array[i] = subTemp;
+				temp = tempResult[0];	
+			}
+			
+		}
+ 
+		return temp == '1' ? temp + array.join('') : array.join('');
+	}
+ 
+	function getMaxLength(a, b) {
+		let alength = a.trim().length;
+		let blength =  b.trim().length;
+ 
+		return Math.max(alength, blength);
+	}
+ 
+	function toNumberAdd(a,b) {
+		return Number(a) + Number(b);
+	}
+ 
+	function getSplit(number) {
+		let result = String(number/10);
+ 
+		let a = result.split('.')[0];
+		let b = result.split('.')[1] ? result.split('.')[1] : 0;
+ 
+		return [a,b];
+	}
+ 
+	console.log('result is : ', add("4442223323234213123124324236748723460283460","748239065024781678026187457016471"));
+
+</script>
+</html>

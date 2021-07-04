@@ -1,4 +1,4 @@
-# vue2.0/3.0双向数据绑定的实现原理
+## vue2.0/3.0双向数据绑定的实现原理
 
 **vue2.0 Object.defineProperty（）**
 
@@ -59,23 +59,23 @@
     }
 ```
 
-# 说一下对Vue生命周期的理解
+## 说一下对Vue生命周期的理解
 
 * Vue实例从创建到销毁的过程就是vue的生命周期。
 * 总共有8个阶段，`beforeCreate`,`created`,`beforeMount`,`mounted`,`beforeUpdate,`,`updated`,`beforeDestory`,`destoryed`。创建前/后，挂载前/后，更新前/后，销毁前/后。
 
-# vue双向数据绑定的原理
+## vue双向数据绑定的原理
 
 * vue实现双向数据绑定主要是：采用数据劫持结合发布者-订阅者模式的方式。
 * 数据劫持：通过Object.defineProperty()来劫持对象各个属性的setter，getter。
 * 发布者-订阅者模式：在数据变动时发布者发布消息给订阅者，触发相应的监听回调。
 
-# Vue如何实现参数传递
+## Vue如何实现参数传递
 
 * 父传子：子通过props属性接收
 * 子传父：子通过$emit方法传递参数
 * 兄弟组件传值：eventBus和vuex
 
-# `<keep-alive></keep-alive>`作用
+## `<keep-alive></keep-alive>`作用
 
 `<keep-alive></keep-alive>`包裹动态组件时，会缓存不活动的组件实例，主要是保留组件状态或避免重新渲染。

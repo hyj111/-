@@ -1,4 +1,6 @@
-# 1.标签语义化
+# css面试题
+
+## 1.标签语义化
 
 - 什么是标签语义化
 
@@ -59,7 +61,7 @@ display:inline-block; /*转为行内块标签*/
     
     
 
-# 2.盒子水平垂直居中
+## 2.盒子水平垂直居中
 
 题目：我有一个大盒子，有一个小盒子，想让小盒子在大盒子中水平垂直居中。
 
@@ -155,7 +157,7 @@ display:inline-block; /*转为行内块标签*/
 
 display: table-cell本身是控制文本的，所以要将块级元素转为行内块元素
 
-# 3.css的盒模型
+## 3.css的盒模型
 
 **标准盒模型`box-sizing:content-box`**
 
@@ -169,7 +171,7 @@ width和height的大小就是指盒子的宽高
 
 话术：其实我们最常用的就是标准盒模型，他的`width`和`height`指的是内容宽高而不是盒子的宽高，当我们设置了`width`和`height`，当我们加边框或者加内边距的时候就会引起盒子大小的变化，css3给我们提供了一种新的盒子模型，怪异盒模型他的`width`和`height`指的是盒子的宽高，不管我们怎么调边框和内边距，盒子大小都不会发生变化。
 
-# 4.经典布局方案
+## 4.经典布局方案
 
 ## 圣杯布局
 
@@ -358,12 +360,12 @@ width和height的大小就是指盒子的宽高
 </html>
 ```
 
-# 5 描述一下脚本`<script>`放在`<head>`和放到`<body>`底部的区别
+## 5 描述一下脚本`<script>`放在`<head>`和放到`<body>`底部的区别
 
 放`<head>`中的情况：脚本会优先加载，但加载过程中，`<body>`还没加载完，会使脚本访问不到`<body>`中的元素。
 放`<body>`底部：脚本在`<body>`加载后加载，能够保证脚本有效地访问`<body>`的元素。
 
-# 6.HTML data-* 属性
+## 6.HTML data-* 属性
 
 使用 data-* 属性来嵌入自定义数据：
 
@@ -392,7 +394,7 @@ function showDetails(animal) {
 
 **使用data-属性选择器好处：绑定DOM强相关数据，js传递数据**
 
-# 7.cookie，sessionStorage，localStorage区别
+## 7.cookie，sessionStorage，localStorage区别
 
 localStorage：本地存储  sessionStorage：会话存储
 
@@ -410,28 +412,28 @@ localStorage：本地存储  sessionStorage：会话存储
 
 （4）cookie 和local都可以支持多窗口共享，而session不支持多窗口共享 但是都支持a链接跳转的新窗口
 
-# 8.为什么要初始化css样式
+## 8.为什么要初始化css样式
 
 因为浏览器的兼容问题，不同浏览器对某些元素默认样式是不同的，如果没有进行css样式的初始化会导致在每一个浏览上的效果会不一样，影响到最终的布局。出现浏览器之间页面显示差距。
 
-# 9.什么是postcss，有什么作用
+## 9.什么是postcss，有什么作用
 
 postcss是一个平台。
 
 基于这个平台可以用一些插件来优化css代码，如autoprefixer插件，就基于postcss，为css加上不同浏览器前缀。
 
-# 10 页面导入样式时，使用link和@import有什么区别？
+## 10 页面导入样式时，使用link和@import有什么区别？
 
 - link属于XHTML标签，除了加载CSS外，还能用于定义RSS,定义rel连接属性等作用；而@import是CSS提供的，只能用于加载CSS;
 - 页面被加载的时，link会同时被加载，而@import引用的CSS会等到页面被加载完再加载;
 - import是CSS2.1 提出的，只在IE5以上才能被识别，而link是XHTML标签，无兼容问题;
 
-# 11`<img>`的`title`和`alt`有什么区别
+## 11`<img>`的`title`和`alt`有什么区别
 
 - `title`通常当鼠标滑动到元素上的时候显示
 - `alt`是`<img>`的特有属性，是图片内容的等价描述，用于图片无法加载时显示、读屏器阅读图片。可提图片高可访问性，除了纯装饰图片外都必须设置有意义的值，搜索引擎会重点分析。
 
-# 12viewport
+## 12viewport
 
 ```html
  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
@@ -450,7 +452,7 @@ postcss是一个平台。
 
 - `rem` 按照设计稿标准走即可
 
-# 13 BFC
+## 13 BFC
 
 ### 什么是BFC
 
